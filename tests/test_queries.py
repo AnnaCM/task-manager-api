@@ -1,5 +1,4 @@
 import pytest
-from models import Tasks
 from .utils import client, test_db
 
 def test_get_tasks(test_db):

@@ -2,7 +2,6 @@ import pytest
 import json
 from unittest.mock import patch
 from datetime import datetime
-from models import Tasks
 from .utils import client, test_db
 
 

@@ -1,4 +1,3 @@
-from datetime import datetime
 from sqlalchemy import Column, Integer, String, Boolean, func
 from sqlalchemy.ext.declarative import declarative_base
 

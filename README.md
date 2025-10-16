@@ -52,11 +52,11 @@ Make sure that you run the tests from the root directory of the project so that 
 
 ## Error Handling
 
-Currently, the API handles errors by raising basic Python exceptions.
+Currently, the API handles errors by raising GraphQLError with custom messages.
 
 ### Planned Improvements for Complex Error Handling
 
-To better support frontend development and enable more user-friendly error messages, a structured error-handling approach can be introduced using Strawberry’s `GraphQLError` class along with custom `extensions`.
+To better support frontend development and enable more user-friendly and structured error messages, a more advanced error-handling approach can be introduced using custom exceptions and the `extensions` field of `GraphQLError`.
 
 Key improvements:
 
@@ -66,16 +66,16 @@ Key improvements:
   {
     "errors": [
       {
-        "message": "Task not found.",
+        "message": "Title cannot be empty.",
         "extensions": {
-          "code": "TASK_NOT_FOUND"
+          "code": "INVALID_INPUT"
         }
       }
     ]
   }
   ```
-- **Frontend Integration**: Error codes (e.g. `TASK_NOT_FOUND`, `INVALID_INPUT`) can be mapped to translated or user-friendly messages on the frontend.
-- **Internationalization Support**: Error codes enable language-specific messaging without hardcoding messages on the backend.
+- **Frontend Integration**: Error codes (e.g. `INVALID_INPUT`) can be mapped to translated or user-friendly messages on the frontend.
+- **Internationalisation Support**: Error codes enable language-specific messaging without hardcoding messages on the backend.
 
 ## Notes
 - The API uses a local SQLite database (tasks.db).

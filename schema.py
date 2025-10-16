@@ -3,6 +3,7 @@ from datetime import datetime
 from models import Tasks
 from strawberry import Schema
 from typing import List, Optional
+from graphql import GraphQLError
 
 
 @strawberry.type
@@ -29,7 +30,7 @@ class Query:
     @strawberry.field
     async def task(self, id: strawberry.ID, info: strawberry.Info) -> TaskType | None:
         if int(id) <= 0:
-            raise Exception("Invalid task ID: must be a positive integer.")
+            raise GraphQLError("Invalid task ID: must be a positive integer.")
 
         db = info.context['db']
         task = db.query(Tasks).filter(Tasks.id == id).first()
@@ -43,7 +44,7 @@ class Mutation:
     @strawberry.mutation
     async def add_task(self, title: str, info: strawberry.Info) -> TaskType:
         if not title.strip():
-            raise Exception("Title cannot be empty")
+            raise GraphQLError("Title cannot be empty")
 
         db = info.context['db']
         task = Tasks(title=title, created_at=int(datetime.utcnow().timestamp()))
@@ -57,7 +58,7 @@ class Mutation:
     @strawberry.mutation
     async def toggle_task(self, id: strawberry.ID, info: strawberry.Info) -> TaskType | None:
         if int(id) <= 0:
-            raise Exception("Invalid task ID: must be a positive integer.")
+            raise GraphQLError("Invalid task ID: must be a positive integer.")
 
         db = info.context['db']
         task = db.query(Tasks).filter(Tasks.id == id).first()
@@ -76,10 +77,10 @@ class Mutation:
     @strawberry.mutation
     async def edit_task(self, id: strawberry.ID, title: str, info: strawberry.Info) -> TaskType | None:
         if int(id) <= 0:
-            raise Exception("Invalid task ID: must be a positive integer.")
+            raise GraphQLError("Invalid task ID: must be a positive integer.")
 
         if not title.strip():
-            raise Exception("Title cannot be empty")
+            raise GraphQLError("Title cannot be empty")
 
         db = info.context['db']
         task = db.query(Tasks).filter(Tasks.id == id).first()
@@ -98,7 +99,7 @@ class Mutation:
     @strawberry.mutation
     async def delete_task(self, id: strawberry.ID, info: strawberry.Info) -> TaskType | None:
         if int(id) <= 0:
-            raise Exception("Invalid task ID: must be a positive integer.")
+            raise GraphQLError("Invalid task ID: must be a positive integer.")
 
         db = info.context['db']
         task = db.query(Tasks).filter(Tasks.id == id).first()

@@ -1,0 +1,13 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+
+# Caches
+.pytest_cache/
+
+# Virtual environment
+fastapienv/
+venv/
+.venv/
+
+# Database files (local only)
+*.db

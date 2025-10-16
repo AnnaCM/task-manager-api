@@ -29,7 +29,7 @@ class Query:
 
     @strawberry.field
     async def task(self, id: strawberry.ID, info: strawberry.Info) -> TaskType | None:
-        if int(id) <= 0:
+        if not id.isdigit() or int(id) <= 0:
             raise GraphQLError("Invalid task ID: must be a positive integer.")
 
         db = info.context['db']
@@ -57,7 +57,7 @@ class Mutation:
     
     @strawberry.mutation
     async def toggle_task(self, id: strawberry.ID, info: strawberry.Info) -> TaskType | None:
-        if int(id) <= 0:
+        if not id.isdigit() or int(id) <= 0:
             raise GraphQLError("Invalid task ID: must be a positive integer.")
 
         db = info.context['db']
@@ -76,7 +76,7 @@ class Mutation:
 
     @strawberry.mutation
     async def edit_task(self, id: strawberry.ID, title: str, info: strawberry.Info) -> TaskType | None:
-        if int(id) <= 0:
+        if not id.isdigit() or int(id) <= 0:
             raise GraphQLError("Invalid task ID: must be a positive integer.")
 
         if not title.strip():
@@ -98,7 +98,7 @@ class Mutation:
 
     @strawberry.mutation
     async def delete_task(self, id: strawberry.ID, info: strawberry.Info) -> TaskType | None:
-        if int(id) <= 0:
+        if not id.isdigit() or int(id) <= 0:
             raise GraphQLError("Invalid task ID: must be a positive integer.")
 
         db = info.context['db']

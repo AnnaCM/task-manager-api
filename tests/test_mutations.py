@@ -130,7 +130,7 @@ def test_edit_task(test_db):
 
 
 @pytest.mark.parametrize("input_data, expected_error_message", [
-    ({"id": -1, "title": "New Test Task"}, "Invalid task ID: must be a positive integer."),
+    ({"id": 0, "title": "New Test Task"}, "Invalid task ID: must be a positive integer."),
     ({"id": 2, "title": " "}, "Title cannot be empty"),
 ])
 def test_edit_task_with_invalid_inputs(test_db, input_data, expected_error_message):

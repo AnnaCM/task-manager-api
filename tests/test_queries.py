@@ -81,7 +81,7 @@ def test_get_task(test_db):
 def test_get_task_with_invalid_input(test_db):
     query = """
     query {
-        task(id:0) {
+        task(id:"test") {
             id
             title
             completed

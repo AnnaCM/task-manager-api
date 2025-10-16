@@ -85,7 +85,7 @@ def test_toggle_task_with_invalid_input(test_db):
     assert response.status_code == 200
 
     data = response.json()
-    assert data["data"] is None
+    assert data["data"]["toggleTask"] is None
     assert data['errors'][0]['message'] == "Invalid task ID: must be a positive integer."
 
 
@@ -106,8 +106,7 @@ def test_toggle_not_found_task(test_db):
     assert response.status_code == 200
 
     data = response.json()
-    assert data["data"] is None
-    assert data['errors'][0]['message'] == "Task with id 4 not found"
+    assert data["data"]["toggleTask"] is None
 
 
 def test_edit_task(test_db):
@@ -153,7 +152,7 @@ def test_edit_task_with_invalid_inputs(test_db, input_data, expected_error_messa
     assert response.status_code == 200
 
     data = response.json()
-    assert data["data"] is None
+    assert data["data"]["editTask"] is None
     assert data['errors'][0]['message'] == expected_error_message
 
 
@@ -174,8 +173,7 @@ def test_edit_not_found_task(test_db):
     assert response.status_code == 200
 
     data = response.json()
-    assert data["data"] is None
-    assert data['errors'][0]['message'] == "Task with id 4 not found"
+    assert data["data"]["editTask"] is None
 
 
 def test_delete_task(test_db):
@@ -215,7 +213,7 @@ def test_delete_task_with_invalid_input(test_db):
     assert response.status_code == 200
 
     data = response.json()
-    assert data["data"] is None
+    assert data["data"]["deleteTask"] is None
     assert data['errors'][0]['message'] == "Invalid task ID: must be a positive integer."
 
 
@@ -236,8 +234,7 @@ def test_delete_not_found_task(test_db):
     assert response.status_code == 200
 
     data = response.json()
-    assert data["data"] is None
-    assert data['errors'][0]['message'] == "Task with id 5 not found"
+    assert data["data"]["deleteTask"] is None
 
 
 def mock_utcnow_and_execute(mutation, fixed_datetime=datetime(2023, 1, 5, 9, 0, 0)):

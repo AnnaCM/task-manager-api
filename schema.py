@@ -27,12 +27,14 @@ class Query:
         return [get_task_type(task) for task in tasks]
 
     @strawberry.field
-    async def task(self, id: strawberry.ID, info: strawberry.Info) -> TaskType:
+    async def task(self, id: strawberry.ID, info: strawberry.Info) -> TaskType | None:
         if int(id) <= 0:
             raise Exception("Invalid task ID: must be a positive integer.")
 
         db = info.context['db']
-        task = get_task_or_throw(db, id)
+        task = db.query(Tasks).filter(Tasks.id == id).first()
+        if not task:
+            return None
 
         return get_task_type(task)
 
@@ -53,12 +55,14 @@ class Mutation:
         return get_task_type(task)
     
     @strawberry.mutation
-    async def toggle_task(self, id: strawberry.ID, info: strawberry.Info) -> TaskType:
+    async def toggle_task(self, id: strawberry.ID, info: strawberry.Info) -> TaskType | None:
         if int(id) <= 0:
             raise Exception("Invalid task ID: must be a positive integer.")
 
         db = info.context['db']
-        task = get_task_or_throw(db, id)
+        task = db.query(Tasks).filter(Tasks.id == id).first()
+        if not task:
+            return None
         
         task.completed = not task.completed
         task.updated_at = int(datetime.utcnow().timestamp())
@@ -70,7 +74,7 @@ class Mutation:
         return get_task_type(task)
 
     @strawberry.mutation
-    async def edit_task(self, id: strawberry.ID, title: str, info: strawberry.Info) -> TaskType:
+    async def edit_task(self, id: strawberry.ID, title: str, info: strawberry.Info) -> TaskType | None:
         if int(id) <= 0:
             raise Exception("Invalid task ID: must be a positive integer.")
 
@@ -78,7 +82,9 @@ class Mutation:
             raise Exception("Title cannot be empty")
 
         db = info.context['db']
-        task = get_task_or_throw(db, id)
+        task = db.query(Tasks).filter(Tasks.id == id).first()
+        if not task:
+            return None
         
         task.title = title
         task.updated_at = int(datetime.utcnow().timestamp())
@@ -90,12 +96,14 @@ class Mutation:
         return get_task_type(task)
 
     @strawberry.mutation
-    async def delete_task(self, id: strawberry.ID, info: strawberry.Info) -> TaskType:
+    async def delete_task(self, id: strawberry.ID, info: strawberry.Info) -> TaskType | None:
         if int(id) <= 0:
             raise Exception("Invalid task ID: must be a positive integer.")
 
         db = info.context['db']
-        task = get_task_or_throw(db, id)
+        task = db.query(Tasks).filter(Tasks.id == id).first()
+        if not task:
+            return None
 
         task_response = get_task_type(task)
         
@@ -103,13 +111,6 @@ class Mutation:
         db.commit()
         
         return task_response
-
-
-def get_task_or_throw(db, id: strawberry.ID) -> Tasks:
-    task = db.query(Tasks).filter(Tasks.id == id).first()
-    if not task:
-        raise Exception("Task with id {id} not found".format(id=id))
-    return task
 
 
 def get_task_type(task: Tasks) -> TaskType:

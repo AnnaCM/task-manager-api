@@ -95,7 +95,7 @@ def test_get_task_with_invalid_input(test_db):
     assert response.status_code == 200
 
     data = response.json()
-    assert data["data"] is None
+    assert data["data"]["task"] is None
     assert data['errors'][0]['message'] == "Invalid task ID: must be a positive integer."
 
 
@@ -116,5 +116,4 @@ def test_get_not_found_task(test_db):
     assert response.status_code == 200
 
     data = response.json()
-    assert data["data"] is None
-    assert data['errors'][0]['message'] == "Task with id 3 not found"
+    assert data["data"]["task"] is None
